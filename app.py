@@ -3,6 +3,7 @@ import queue
 import soundcard as sc
 from faster_whisper import WhisperModel
 import tkinter as tk
+import numpy as np
 
 SAMPLERATE = 16000
 CHUNK_SECONDS = 4
@@ -23,6 +24,8 @@ class SubtitleOverlay:
         with mic.recorder(samplerate=SAMPLERATE) as rec:
             while self.running:
                 data = rec.record(numframes=SAMPLERATE * CHUNK_SECONDS)
+                # Convert to mono so the model receives a 1-D array
+                data = np.mean(data, axis=1)
                 # transcribe the chunk and combine segment texts
                 segments, _ = self.model.transcribe(data)
                 text = "".join(segment.text for segment in segments).strip()
