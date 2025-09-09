@@ -1,2 +1,4 @@
 soundcard
 faster-whisper
+webrtcvad
+openai
