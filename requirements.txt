@@ -1,2 +1,2 @@
 soundcard
-whisper
+faster-whisper

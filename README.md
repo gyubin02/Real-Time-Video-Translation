@@ -4,9 +4,9 @@ This repository contains a simple desktop application that listens to your syste
 
 ## Requirements
 
-- Python 3.9+
+- Python 3.9+ (tested on Python 3.13)
 - [soundcard](https://pypi.org/project/soundcard/) for capturing system audio
-- [openai-whisper](https://pypi.org/project/openai-whisper/) for speech recognition
+- [faster-whisper](https://pypi.org/project/faster-whisper/) for speech recognition
 - Tkinter (usually bundled with Python) for the overlay GUI
 
 Install the Python dependencies:
@@ -33,4 +33,4 @@ A borderless window will appear on top of your screen showing the most recent tr
 
 ## Limitations
 
-This example uses small audio chunks and a Whisper model, so transcription latency and accuracy depend on the chosen model and the performance of your machine.
+This example uses small audio chunks and a Whisper model (via `faster-whisper`), so transcription latency and accuracy depend on the chosen model and the performance of your machine.

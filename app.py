@@ -1,7 +1,7 @@
 import threading
 import queue
 import soundcard as sc
-import whisper
+from faster_whisper import WhisperModel
 import tkinter as tk
 
 SAMPLERATE = 16000
@@ -11,7 +11,7 @@ class SubtitleOverlay:
     """Simple desktop overlay that transcribes system audio."""
 
     def __init__(self, model_size: str = "small") -> None:
-        self.model = whisper.load_model(model_size)
+        self.model = WhisperModel(model_size, compute_type="int8_float32")
         self.text_queue: "queue.Queue[str]" = queue.Queue()
         self.running = True
 
@@ -23,9 +23,9 @@ class SubtitleOverlay:
         with mic.recorder(samplerate=SAMPLERATE) as rec:
             while self.running:
                 data = rec.record(numframes=SAMPLERATE * CHUNK_SECONDS)
-                # whisper expects float32 numpy array
-                result = self.model.transcribe(data, fp16=False)
-                text = result.get("text", "").strip()
+                # transcribe the chunk and combine segment texts
+                segments, _ = self.model.transcribe(data)
+                text = "".join(segment.text for segment in segments).strip()
                 if text:
                     self.text_queue.put(text)
 
